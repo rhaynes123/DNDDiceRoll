@@ -1,0 +1,81 @@
+﻿@model Dice
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<script src="https://code.jquery.com/jquery-3.4.0.js"></script>
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<div>
+    @Html.AntiForgeryToken()
+    <form method="POST">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <label style="padding: 0 10px 0 40px">Number of Dice</label>
+                        <input type="text" id="qtyOfDice" class="small" placeholder="1" size="8" />
+                    </th>
+                    <th>
+                        <label style="padding: 0 10px 0 40px">Bonus</label>
+                        <input type="text" id="rollBonus" class="small" placeholder="0" size="8" />
+                    </th>
+                    <th>
+                        <label name="diceType">Type of Dice</label>
+                        <select name="diceType" id="diceType" class="form-control-sm">
+                            <option value="">-Select a Dice-</option>
+                            <option value="2">D2</option>
+                            <option value="4">D4</option>
+                            <option value="6">D6</option>
+                            <option value="8">D8</option>
+                            <option value="10">D10</option>
+                            <option value="12">D12</option>
+                            <option value="20">D20</option>
+                            <option value="100">D100</option>
+                        </select>
+
+                    <th style="padding: 0 10px 0 40px">
+                        <button type="submit" class="btn btn-primary" id="btnDiceRoll">Roll</button>
+
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        
+    </form>
+</div>
+
+<script>
+    $('#btnDiceRoll').click(function (event) {
+        event.preventDefault();
+        rollSomeDice();
+    });
+    function rollSomeDice() {
+        let selectedDice = parseInt($("#diceType").val());
+        let qtyOfDice = parseInt($("#qtyOfDice").val());
+        let rollBonus = parseInt($("#rollBonus").val());
+        let roll = {
+            sides: selectedDice,
+            qty: qtyOfDice,
+            bonus: rollBonus
+        };
+
+        $(document).ready(function () {
+        $.ajax({
+            type:"POST",
+            url: '@Url.Action("RollResult", "Home")',
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(roll),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+        }).done(function (data) { alert("You rolled a "+ data); console.log(data); })
+            .fail(function () { alert("Error"); })
+    });
+ }
+</script>
