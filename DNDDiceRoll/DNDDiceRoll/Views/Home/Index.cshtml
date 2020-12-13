@@ -4,9 +4,10 @@
 }
 
 <script src="https://code.jquery.com/jquery-3.4.0.js"></script>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome To DND Dice Roll!</h1>
+    <p>Have fun!!</p>
 </div>
 <div>
     @Html.AntiForgeryToken()
@@ -50,32 +51,12 @@
 <script>
     $('#btnDiceRoll').click(function (event) {
         event.preventDefault();
-        rollSomeDice();
-    });
-    function rollSomeDice() {
         let selectedDice = parseInt($("#diceType").val());
         let qtyOfDice = parseInt($("#qtyOfDice").val());
         let rollBonus = parseInt($("#rollBonus").val());
-        let roll = {
-            sides: selectedDice,
-            qty: qtyOfDice,
-            bonus: rollBonus
-        };
-
         $(document).ready(function () {
-        $.ajax({
-            type:"POST",
-            url: '@Url.Action("RollResult", "Home")',
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(roll),
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("XSRF-TOKEN",
-                    $('input:hidden[name="__RequestVerificationToken"]').val());
-            },
-
-        }).done(function (data) { alert("You rolled a "+ data); console.log(data); })
-            .fail(function () { alert("Error"); })
+            let roll = makeRoll(selectedDice, qtyOfDice, rollBonus);
+            displayRoll(roll);
+        });
     });
- }
 </script>
