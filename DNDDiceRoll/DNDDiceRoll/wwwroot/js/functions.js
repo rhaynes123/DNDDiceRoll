@@ -1,21 +1,11 @@
 // Please add typescript only to functions.ts and not to functions.js. functions.js will be auto generated
-function displayRoll(input) {
-    alert("You rolled a " + input);
-    console.log(typeof input);
-    console.log(input);
-}
-function getRandomFromDiceTypes(typeofDice) {
-    var bound = 1;
-    var result = Math.floor(Math.random() * typeofDice + bound) + bound;
-    console.log("random result: " + result);
-    return result;
-}
+var displayRoll = function (input) { return alert("You rolled a " + input); };
 function makeRoll(numSides, qty, bonus) {
+    if (bonus === void 0) { bonus = 0; }
     var sum = 0;
+    var bound = 1;
     for (var r = 0; r < qty; r++) {
-        sum += getRandomFromDiceTypes(numSides + bonus);
-        console.log("sum: " + sum);
+        sum += Math.floor(Math.random() * numSides + bound) + bound;
     }
-    console.log(sum);
-    return sum;
+    return sum + bonus;
 }

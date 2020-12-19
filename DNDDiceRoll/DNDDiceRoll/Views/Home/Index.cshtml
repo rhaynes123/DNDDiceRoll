@@ -16,14 +16,6 @@
             <thead>
                 <tr>
                     <th>
-                        <label style="padding: 0 10px 0 40px">Number of Dice</label>
-                        <input type="text" id="qtyOfDice" class="small" placeholder="1" size="8" />
-                    </th>
-                    <th>
-                        <label style="padding: 0 10px 0 40px">Bonus</label>
-                        <input type="text" id="rollBonus" class="small" placeholder="0" size="8" />
-                    </th>
-                    <th>
                         <label name="diceType">Type of Dice</label>
                         <select name="diceType" id="diceType" class="form-control-sm">
                             <option value="">-Select a Dice-</option>
@@ -36,10 +28,17 @@
                             <option value="20">D20</option>
                             <option value="100">D100</option>
                         </select>
-
+                    </th>
+                    <th>
+                        <label style="padding: 0 10px 0 40px">Number of Dice</label>
+                        <input type="text" id="qtyOfDice" class="small" placeholder="1" size="8" />
+                    </th>
+                    <th>
+                        <label style="padding: 0 10px 0 40px">Bonus</label>
+                        <input type="text" id="rollBonus" class="small" placeholder="0" size="8" />
+                    </th>
                     <th style="padding: 0 10px 0 40px">
                         <button type="submit" class="btn btn-primary" id="btnDiceRoll">Roll</button>
-
                     </th>
                 </tr>
             </thead>
@@ -48,15 +47,49 @@
     </form>
 </div>
 
-<script>
-    $('#btnDiceRoll').click(function (event) {
-        event.preventDefault();
-        let selectedDice = parseInt($("#diceType").val());
-        let qtyOfDice = parseInt($("#qtyOfDice").val());
-        let rollBonus = parseInt($("#rollBonus").val());
+<div class="text-center">
+    <div class="col-md-6">
+        <table class="table table-bordered" id="tblResults">
+            <thead>
+                <tr>
+                    <th>Dice</th>
+                    <th>Qty</th>
+                    <th>Bonus</th>
+                    <th>Result</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+    <script>
+        $('#btnDiceRoll').click(function (event) {
+            event.preventDefault();
         $(document).ready(function () {
-            let roll = makeRoll(selectedDice, qtyOfDice, rollBonus);
-            displayRoll(roll);
-        });
-    });
-</script>
+            let tableHtml = "";
+            let selectedDice = parseInt($("#diceType").val());
+            let qtyOfDice = parseInt($("#qtyOfDice").val());
+            let rollBonus = parseInt($("#rollBonus").val());
+            let today = new Date();
+            let timeOfRoll = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+            if (Number.isNaN(qtyOfDice) || Number.isNaN(selectedDice)) {
+                alert("You must select a dice and its quantity.");
+            }
+            else {
+                let roll = makeRoll(selectedDice, qtyOfDice, rollBonus);
+                tableHtml += '<tr><td>'
+                    + 'D'+selectedDice + '</td><td>'
+                    + qtyOfDice + '</td><td>'
+                    + rollBonus + '</td><td>'
+                    + roll + '</td><td>'
+                    + timeOfRoll.toString() + '</td></tr>';
+                $('#tblResults').append(tableHtml);
+                displayRoll(roll);
+            }
+                
+            });
+        });</script>
